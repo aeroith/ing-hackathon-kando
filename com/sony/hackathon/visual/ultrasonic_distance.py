@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
+from beep import beep
 import time
- 
+
 #GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BCM)
   
@@ -58,7 +59,7 @@ if __name__ == '__main__':
                 print ("Left = %.1f cm" % dist_L)
                 print ("******************************************")
                 print ("MINIMUM = %.1f cm" % distMin)
-                time.sleep(1)
+                beep(distMin)
                                                                                                                                                # Reset by pressing CTRL + C
         except KeyboardInterrupt:
             print("Measurement stopped by User")

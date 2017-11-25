@@ -11,7 +11,7 @@ MAX_DISTANCE = 5000
 
 
 def beep(distance):
-    sleep_amount = float(distance) * float(distance) / 1000000
+    sleep_amount = float(distance) * float(distance) / 100000
     if sleep_amount < 5:
         time.sleep(sleep_amount/2)
         p = pyaudio.PyAudio()
@@ -21,6 +21,7 @@ def beep(distance):
                         rate=wf.getframerate(),
                         output=True)
         data = wf.readframes(CHUNK)
+        print "beep"
         while len(data) > 0:
             stream.write(data)
             data = wf.readframes(CHUNK)

@@ -54,8 +54,9 @@ if __name__ == "__main__":
         camera.start_preview()
     	# Camera warm-up time
     	time.sleep(2)
-    	camera.capture("foo.jpg")
-	with open("foo.jpg", "rb") as imageFile:
-            f = imageFile.read()
-	    vc = visual_cortex()
-    	    vc.see_and_tell(f)
+        while(True):
+    	    camera.capture("foo.jpg")
+	    with open("foo.jpg", "rw") as imageFile:
+                f = imageFile.read()
+	        vc = visual_cortex()
+    	        vc.see_and_tell(f)

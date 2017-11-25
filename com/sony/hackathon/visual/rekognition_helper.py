@@ -139,5 +139,5 @@ class rekognition_helper(object):
         soundBytes = resp['AudioStream'].read()
         soundfile.write(soundBytes)
         soundfile.close()
-        os.system('afplay /tmp/sound.mp3')  # Works only on Mac OS, sorry
+        os.system('omxplayer /tmp/sound.mp3')  # Works only on Mac OS, sorry
         os.remove('/tmp/sound.mp3')
