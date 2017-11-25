@@ -29,10 +29,11 @@ class visual_cortex(object):
         for matched_face_id in matched_face_ids:
             matched_names.append(self.known_faces[matched_face_id])
         matched_names_unique = list(set(matched_names))
+
         if len(matched_names_unique) > 1:
             matched_names, last = ", ".join(matched_names_unique[:-1]), matched_names_unique[-1]
             re_helper.speak(" ve ".join([matched_names, last]), voice='Filiz')
-        else:
+        elif len(matched_names_unique) == 1:
             re_helper.speak(matched_names_unique[0], voice='Filiz')
 
     def see_and_tell(self, byte_array):
@@ -53,11 +54,12 @@ if __name__ == "__main__":
     with picamera.PiCamera() as camera:
         camera.resolution = (1024, 768)
         camera.start_preview()
-    	# Camera warm-up time
-    	time.sleep(2)
-        while(True):
-    	    camera.capture("foo.jpg")
-	    with open("foo.jpg", "rw") as imageFile:
+        # Camera warm-up time
+        time.sleep(2)
+        while (True):
+            camera.capture("foo.jpg")
+            with open("foo.jpg", "rw") as imageFile:
                 f = imageFile.read()
-	        vc = visual_cortex()
-    	        vc.see_and_tell(f)
+                vc = visual_cortex()
+                vc.see_and_tell(f)
+                time.sleep(2)
