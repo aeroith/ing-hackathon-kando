@@ -1,6 +1,6 @@
 import boto3
 import os
-
+from botocore.exceptions import ClientError
 
 class rekognition_helper(object):
     def __init__(self):
@@ -11,6 +11,7 @@ class rekognition_helper(object):
 
         self.detect_text_threshold = 70
         self.detect_label_threshold = 50
+        self.face_collection_name = 'kando-team-collection'
 
         self.rekognition_client = boto3.client('rekognition', aws_access_key_id=self.access_key,
                                                aws_secret_access_key=self.secret_key, region_name=self.region)
@@ -33,21 +34,19 @@ class rekognition_helper(object):
         )
         return response['FaceDetails']
 
-    def create_collection(self):
-        response = self.rekognition_client.create_collection(
-            CollectionId='test-collection'
-        )
-        print response
 
     def detect_labels(self, byte_array):
         response = self.rekognition_client.detect_labels(
             Image={
                 'Bytes': byte_array
             },
-            MaxLabels=2,
+            MaxLabels=1,
             MinConfidence=self.detect_label_threshold
         )
-        print response
+        label = ""
+        if response and len(response['Labels']) == 1:
+            label = response['Labels'][0]['Name']
+        return label
 
     def detect_text(self, byte_array):
         response = self.rekognition_client.detect_text(
@@ -65,30 +64,25 @@ class rekognition_helper(object):
                     detected_text_list.append(detected_text)
         return ' '.join(detected_text_list)
 
-    def index_faces(self):
+    def index_faces(self, s3_path):
         response = self.rekognition_client.index_faces(
-            CollectionId='test-collection',
+            CollectionId=self.face_collection_name,
             Image={
                 'S3Object': {
                     'Bucket': self.photo_bucket,
-                    'Name': 'test.jpg'}
+                    'Name': s3_path}
             },
-            ExternalImageId='string',
             DetectionAttributes=[
                 'DEFAULT',
             ]
         )
         print response
 
-    def search_faces_by_image(self):
-        with open("/Users/trberkad/Downloads/gozluklu_test.jpg", "rb") as imageFile:
-            f = imageFile.read()
-            b = bytearray(f)
-
+    def search_faces_by_image(self, byte_array):
         response = self.rekognition_client.search_faces_by_image(
-            CollectionId='test-collection',
+            CollectionId=self.face_collection_name,
             Image={
-                'Bytes': b
+                'Bytes': byte_array
             }
         )
         print response
@@ -99,7 +93,7 @@ class rekognition_helper(object):
             b = bytearray(f)
 
         response = self.rekognition_client.search_faces_by_image(
-            CollectionId='test-collection',
+            CollectionId=self.face_collection_name,
             Image={
                 'S3Object': {
                     'Bucket': self.photo_bucket,
@@ -107,6 +101,31 @@ class rekognition_helper(object):
             }
         )
         print response
+
+    def list_faces(self):
+        response = self.rekognition_client.list_faces(
+            CollectionId=self.face_collection_name
+        )
+        print response
+
+    def create_one_time_collection(self):
+        try:
+            create_collection_response = self.rekognition_client.create_collection(
+                CollectionId=self.face_collection_name
+            )
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceAlreadyExistsException':
+                pass
+
+        faces = ['berkay.jpeg', 'denizcan.jpeg', 'olcay.jpg', 'sercan.jpeg', 'serhat.jpeg']
+        for face in faces:
+            self.index_faces(face)
+
+    def delete_collection(self):
+        response = self.rekognition_client.delete_collection(
+            CollectionId=self.face_collection_name
+        )
+        return response
 
     def speak(self, text, format='mp3', voice='Brian'):
         resp = self.polly_client.synthesize_speech(OutputFormat=format, Text=text, VoiceId=voice)
@@ -116,3 +135,4 @@ class rekognition_helper(object):
         soundfile.close()
         os.system('afplay /tmp/sound.mp3')  # Works only on Mac OS, sorry
         os.remove('/tmp/sound.mp3')
+
