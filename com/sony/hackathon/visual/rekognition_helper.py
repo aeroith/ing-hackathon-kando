@@ -1,5 +1,6 @@
 import boto3
 import os
+from pygame import mixer # Load the required library
 from botocore.exceptions import ClientError
 
 class rekognition_helper(object):
@@ -141,5 +142,7 @@ class rekognition_helper(object):
         soundBytes = resp['AudioStream'].read()
         soundfile.write(soundBytes)
         soundfile.close()
-        os.system('omxplayer /tmp/sound.mp3')  # Works only on Mac OS, sorry
+        mixer.init()
+        mixer.music.load('/tmp/sound.mp3')
+        mixer.music.play()
         os.remove('/tmp/sound.mp3')
