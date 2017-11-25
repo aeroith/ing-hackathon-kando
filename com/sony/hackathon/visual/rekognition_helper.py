@@ -133,7 +133,7 @@ class rekognition_helper(object):
         )
         return response
 
-    def speak(self, text, format='mp3', voice='Emma'):
+    def speak(self, text, format='mp3', voice='Salli'):
         resp = self.polly_client.synthesize_speech(OutputFormat=format, Text=text, VoiceId=voice)
         soundfile = open('/tmp/sound.mp3', 'w')
         soundBytes = resp['AudioStream'].read()
@@ -141,4 +141,3 @@ class rekognition_helper(object):
         soundfile.close()
         os.system('afplay /tmp/sound.mp3')  # Works only on Mac OS, sorry
         os.remove('/tmp/sound.mp3')
-
