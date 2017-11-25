@@ -79,19 +79,20 @@ class rekognition_helper(object):
         print response
 
     def search_faces_by_image(self, byte_array):
-        response = self.rekognition_client.search_faces_by_image(
-            CollectionId=self.face_collection_name,
-            Image={
-                'Bytes': byte_array
-            }
-        )
-        face_matches = response['FaceMatches']
         face_ids = []
-        if len(face_matches) != 0:
-            for face in face_matches:
-                face_ids.append(face['Face']['FaceId'])
-
-        return face_ids
+        try:
+            response = self.rekognition_client.search_faces_by_image(
+                CollectionId=self.face_collection_name,
+                Image={
+                    'Bytes': byte_array
+                }
+            )
+            face_matches = response['FaceMatches']
+            if len(face_matches) != 0:
+                for face in face_matches:
+                    face_ids.append(face['Face']['FaceId'])
+        except:
+            return face_ids
 
     def search_faces_by_image_s3(self):
         with open("/Users/trberkad/Downloads/gozluklu_test.jpg", "rb") as imageFile:

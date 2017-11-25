@@ -29,7 +29,8 @@ class visual_cortex(object):
         for matched_face_id in matched_face_ids:
             matched_names.append(self.known_faces[matched_face_id])
         matched_names_unique = list(set(matched_names))
-
+        print 'I know these people!'
+        print matched_names_unique
         if len(matched_names_unique) > 1:
             matched_names, last = ", ".join(matched_names_unique[:-1]), matched_names_unique[-1]
             re_helper.speak(" ve ".join([matched_names, last]), voice='Filiz')
@@ -41,6 +42,7 @@ class visual_cortex(object):
         # re_helper.create_one_time_collection()
         # re_helper.search_faces_by_image(byte_array)
         detected_label = re_helper.detect_labels(byte_array)
+        print 'Detected label: ' + detected_label
         re_helper.speak(random.choice(self.sentence_prefixes_object).format(detected_label))
         if detected_label in self.human_like:
             matched_face_ids = re_helper.search_faces_by_image(byte_array)
