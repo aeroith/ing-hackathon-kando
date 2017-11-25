@@ -85,7 +85,12 @@ class rekognition_helper(object):
                 'Bytes': byte_array
             }
         )
-        print response
+        face_matches = response['FaceMatches']
+        face_id = ""
+        if len(face_matches) != 0:
+            face_id = face_matches[0]['Face']['FaceId']
+
+        return face_id
 
     def search_faces_by_image_s3(self):
         with open("/Users/trberkad/Downloads/gozluklu_test.jpg", "rb") as imageFile:
@@ -117,7 +122,7 @@ class rekognition_helper(object):
             if e.response['Error']['Code'] == 'ResourceAlreadyExistsException':
                 pass
 
-        faces = ['berkay.jpeg', 'denizcan.jpeg', 'olcay.jpg', 'sercan.jpeg', 'serhat.jpeg']
+        faces = ['serhat1.jpeg', 'serhat2.jpeg', 'serhat3.jpeg']
         for face in faces:
             self.index_faces(face)
 
@@ -127,7 +132,7 @@ class rekognition_helper(object):
         )
         return response
 
-    def speak(self, text, format='mp3', voice='Brian'):
+    def speak(self, text, format='mp3', voice='Emma'):
         resp = self.polly_client.synthesize_speech(OutputFormat=format, Text=text, VoiceId=voice)
         soundfile = open('/tmp/sound.mp3', 'w')
         soundBytes = resp['AudioStream'].read()
