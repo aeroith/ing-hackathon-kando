@@ -48,7 +48,9 @@ class visual_cortex(object):
             matched_face_ids = re_helper.search_faces_by_image(byte_array)
             self.__tell_known_names(matched_face_ids)
         else:
-            re_helper.speak(text=re_helper.detect_text(byte_array))
+            detected_text = re_helper.detect_text(byte_array)
+            print 'I detected text!' + detected_text
+            re_helper.speak(detected_text)
 
 
 if __name__ == "__main__":
@@ -58,10 +60,9 @@ if __name__ == "__main__":
         camera.start_preview()
         # Camera warm-up time
         time.sleep(2)
-        while (True):
+        while True:
             camera.capture("foo.jpg")
             with open("foo.jpg", "rw") as imageFile:
                 f = imageFile.read()
                 vc = visual_cortex()
                 vc.see_and_tell(f)
-                time.sleep(2)
