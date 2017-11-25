@@ -92,7 +92,8 @@ class rekognition_helper(object):
                 for face in face_matches:
                     face_ids.append(face['Face']['FaceId'])
         except:
-            return face_ids
+            pass
+        return face_ids
 
     def search_faces_by_image_s3(self):
         with open("/Users/trberkad/Downloads/gozluklu_test.jpg", "rb") as imageFile:
