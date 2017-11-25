@@ -1,4 +1,7 @@
 from rekognition_helper import rekognition_helper
+import io
+import time
+import picamera
 
 
 class visual_cortex(object):
@@ -13,10 +16,17 @@ class visual_cortex(object):
         re_helper.detect_labels(byte_array)
         re_helper.speak(text=re_helper.detect_text(byte_array))
 
-
 if __name__ == "__main__":
-    with open("/Users/trberkad/Downloads/gozluklu_test.jpg", "rb") as imageFile:
-        f = imageFile.read()
+    my_stream = io.BytesIO()
+    with picamera.PiCamera() as camera:
+	camera.resolution = (1024, 768)
+        camera.start_preview()
+    	# Camera warm-up time
+    	time.sleep(2)
+    	camera.capture("foo.jpg")
+	with open("foo.jpg", "rb") as imageFile:
+            f = imageFile.read()
+	    vc = visual_cortex()
+    	    vc.see_and_tell(f)
 
-    vc = visual_cortex()
-    vc.see_and_tell(f)
+   
