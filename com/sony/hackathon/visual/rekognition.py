@@ -15,18 +15,28 @@ class visual_cortex(object):
                             'f460ed5d-ecba-4ca1-967a-1a380862d03f': 'Serhat',
                             '2e50621b-c4cc-4712-9e80-f43f399bd7a0': 'Olcay'}
 
+    def __tell_known_names(self, matched_face_ids):
+        matched_names = []
+        re_helper = rekognition_helper()
+        for matched_face_id in matched_face_ids:
+            matched_names.append(self.known_faces[matched_face_id])
+        if len(list(set(matched_names))) > 1:
+            matched_names, last = ", ".join(list(set(matched_names))[:-1]), list(set(matched_names))[-1]
+            re_helper.speak(" ve ".join([matched_names, last]), voice='Filiz')
+        else:
+            re_helper.speak(list(set(matched_names))[0], voice='Filiz')
+
     def see_and_tell(self, byte_array):
         re_helper = rekognition_helper()
-        #re_helper.create_one_time_collection()
+        # re_helper.create_one_time_collection()
         re_helper.search_faces_by_image(byte_array)
         detected_label = re_helper.detect_labels(byte_array)
         re_helper.speak(detected_label)
         if detected_label in self.human_like:
-            matched_face_id = re_helper.search_faces_by_image(byte_array)
-            matched_name = self.known_faces[matched_face_id]
-            re_helper.speak(matched_name, voice='Filiz')
-
-        re_helper.speak(text=re_helper.detect_text(byte_array))
+            matched_face_ids = re_helper.search_faces_by_image(byte_array)
+            self.__tell_known_names(matched_face_ids)
+        else:
+            re_helper.speak(text=re_helper.detect_text(byte_array))
 
 
 if __name__ == "__main__":

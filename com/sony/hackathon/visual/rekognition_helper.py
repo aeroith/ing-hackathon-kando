@@ -86,11 +86,12 @@ class rekognition_helper(object):
             }
         )
         face_matches = response['FaceMatches']
-        face_id = ""
+        face_ids = []
         if len(face_matches) != 0:
-            face_id = face_matches[0]['Face']['FaceId']
+            for face in face_matches:
+                face_ids.append(face['Face']['FaceId'])
 
-        return face_id
+        return face_ids
 
     def search_faces_by_image_s3(self):
         with open("/Users/trberkad/Downloads/gozluklu_test.jpg", "rb") as imageFile:
