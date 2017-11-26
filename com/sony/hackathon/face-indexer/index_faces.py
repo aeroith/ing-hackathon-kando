@@ -22,19 +22,9 @@ face_collection_name = 'kando-team-collection'
 rekognition_client = boto3.client('rekognition', aws_access_key_id=access_key,
                                   aws_secret_access_key=secret_key, region_name=region)
 
-faces_to_index = ['berkay1.jpeg',
-'berkay2.jpeg',
-'berkay3.jpeg',
-'denizcan1.jpeg',
-'denizcan2.jpeg',
-'denizcan3.jpeg',
-'olcay1.jpeg',
-'olcay2.jpeg',
-'olcay3.jpeg',
-'olcay4.jpeg',
-'olcay5.jpeg',
-'sercan1.jpeg',
-'sercan2.jpeg']
+faces_to_index = ['aysegul_1.jpeg',
+'aysegul_2.jpeg',
+'aysegul_3.jpeg']
 
 for face in faces_to_index:
     index_face(face)
