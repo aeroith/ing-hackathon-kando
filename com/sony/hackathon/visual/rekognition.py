@@ -32,7 +32,11 @@ class visual_cortex(object):
                             '7261819c-0f5c-49e4-9cf2-549907cb5a0f': 'Olcay',
                             '23c7f00a-8483-4280-a0a1-aaffbe5e1e8c': 'Aysegul',
                             '9a6aa2bf-a0f4-48b9-9d54-00c56028bb88': 'Aysegul',
-                            'aa51a0ae-6df5-4642-a7ac-762cce6791e2': 'Aysegul'}
+                            'aa51a0ae-6df5-4642-a7ac-762cce6791e2': 'Aysegul',
+                            '0fb8374d-b6a7-448f-a5ef-1f8e3a3cdb99': 'Pinar',
+                            '9d9c2cec-81a6-4f73-bd8d-306f0a5412ed': 'Pinar',
+                            'acb3f948-4e56-4a03-9ae0-a08dddefe213': 'Pinar',
+                            '26673d23-6668-41e7-b2ae-b0e6691b3b02': 'Pinar'}
         self.sentence_prefixes_object = [
             'I see {}.',
             'I think I see {}.',
