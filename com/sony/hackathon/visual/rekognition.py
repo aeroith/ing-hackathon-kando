@@ -70,6 +70,8 @@ if __name__ == "__main__":
     my_stream = io.BytesIO()
     with picamera.PiCamera() as camera:
         camera.resolution = (1024, 768)
+        camera.hflip = True
+        camera.vflip = True
         camera.start_preview()
         # Camera warm-up time
         time.sleep(2)
