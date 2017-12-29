@@ -57,11 +57,11 @@ class visual_cortex(object):
         elif len(matched_names_unique) == 1:
             re_helper.speak(matched_names_unique[0], voice='Filiz')
 
-    def see_and_tell(self, byte_array):
+    def see_and_tell(self, byte_array, image_path):
         re_helper = rekognition_helper()
         # re_helper.create_one_time_collection()
         # re_helper.search_faces_by_image(byte_array)
-        detected_label = re_helper.detect_labels(byte_array)
+        detected_label = re_helper.detect_labels_offline(image_path)
         print 'Detected label: ' + detected_label
         re_helper.speak(random.choice(self.sentence_prefixes_object).format(detected_label))
         if detected_label in self.human_like:
@@ -87,4 +87,4 @@ if __name__ == "__main__":
             camera.capture("foo.jpg")
             with open("foo.jpg", "rw") as imageFile:
                 f = imageFile.read()
-                vc.see_and_tell(f)
+                vc.see_and_tell(f, "foo.jpg")
